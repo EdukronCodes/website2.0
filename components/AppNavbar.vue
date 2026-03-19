@@ -144,15 +144,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useContent } from '~/composables/useContent'
+import { ref, computed } from 'vue'
+
+// Composables are auto-imported in Nuxt
+const { searchTopics } = useContent()
 
 const showMobileMenu = ref(false)
 const showSearch = ref(false)
 const searchQuery = ref('')
 const isDark = ref(true)
-
-const { searchTopics } = useContent()
 
 const searchResults = computed(() => {
   if (!searchQuery.value) return []

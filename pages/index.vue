@@ -101,8 +101,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useContent } from '~/composables/useContent'
 
+// Composables are auto-imported in Nuxt
 const { categories } = useContent()
 
 const scrollToCategories = () => {

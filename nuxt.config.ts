@@ -3,9 +3,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
-  css: ['~/assets/css/globals.css'],
+  css: ['./assets/css/globals.css'],
   tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css',
     configPath: 'tailwind.config.ts',
     exposeConfig: false,
     inlineConfig: {

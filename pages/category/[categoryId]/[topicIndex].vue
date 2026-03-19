@@ -128,11 +128,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useContent } from '~/composables/useContent'
 import { marked } from 'marked'
 
 const route = useRoute()
 const router = useRouter()
+// Composables are auto-imported in Nuxt
 const { getTopics, getMarkdownContent, categories } = useContent()
 
 const categoryId = computed(() => route.params.categoryId as string)

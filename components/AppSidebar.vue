@@ -91,10 +91,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useContent } from '~/composables/useContent'
 
+// Composables are auto-imported in Nuxt
 const props = defineProps<{
   categoryId: string
   currentTopicId?: string

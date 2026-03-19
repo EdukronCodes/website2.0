@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts">
-import { useContent } from '~/composables/useContent'
-
+// Composables are auto-imported in Nuxt
 const { categories } = useContent()
 </script>

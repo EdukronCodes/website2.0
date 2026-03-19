@@ -66,9 +66,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useContent } from '~/composables/useContent'
 
 const route = useRoute()
+// Composables are auto-imported in Nuxt
 const { getTopics, categories } = useContent()
 
 const categoryId = computed(() => route.params.categoryId as string)
