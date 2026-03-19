@@ -1,103 +1,27 @@
 // Navigation.js - Handles sidebar navigation and category switching
+// Uses actual topic names from topicConfig in markdown.js
 
-const categories = {
-  'data-science': {
-    name: '📊 Data Science',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `data-science-${i+1}`,
-      name: `Topic ${i+1}: Data Science Concept ${i+1}`,
-      file: `data-science-${i+1}.md`
-    }))
-  },
-  'ai': {
-    name: '🤖 Artificial Intelligence',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `ai-${i+1}`,
-      name: `Topic ${i+1}: AI Concept ${i+1}`,
-      file: `ai-${i+1}.md`
-    }))
-  },
-  'ml': {
-    name: '🧠 Machine Learning',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `ml-${i+1}`,
-      name: `Topic ${i+1}: ML Concept ${i+1}`,
-      file: `ml-${i+1}.md`
-    }))
-  },
-  'genai': {
-    name: '✨ Generative AI',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `genai-${i+1}`,
-      name: `Topic ${i+1}: Gen AI Concept ${i+1}`,
-      file: `genai-${i+1}.md`
-    }))
-  },
-  'agentic': {
-    name: '🎯 Agentic AI',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `agentic-${i+1}`,
-      name: `Topic ${i+1}: Agentic AI Concept ${i+1}`,
-      file: `agentic-${i+1}.md`
-    }))
-  },
-  'programming': {
-    name: '💻 Programming',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `programming-${i+1}`,
-      name: `Topic ${i+1}: Programming Topic ${i+1}`,
-      file: `programming-${i+1}.md`
-    }))
-  },
-  'big-data': {
-    name: '📈 Big Data & Processing',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `big-data-${i+1}`,
-      name: `Topic ${i+1}: Big Data Topic ${i+1}`,
-      file: `big-data-${i+1}.md`
-    }))
-  },
-  'azure-data': {
-    name: '☁️ Azure Data Engineering',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `azure-data-${i+1}`,
-      name: `Topic ${i+1}: Azure Data Topic ${i+1}`,
-      file: `azure-data-${i+1}.md`
-    }))
-  },
-  'azure-ai': {
-    name: '🔧 Azure AI & ML',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `azure-ai-${i+1}`,
-      name: `Topic ${i+1}: Azure AI Topic ${i+1}`,
-      file: `azure-ai-${i+1}.md`
-    }))
-  },
-  'devops': {
-    name: '⚙️ DevOps & MLOps',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `devops-${i+1}`,
-      name: `Topic ${i+1}: DevOps Topic ${i+1}`,
-      file: `devops-${i+1}.md`
-    }))
-  },
-  'projects': {
-    name: '🚀 Projects & Use Cases',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `projects-${i+1}`,
-      name: `Topic ${i+1}: Project Topic ${i+1}`,
-      file: `projects-${i+1}.md`
-    }))
-  },
-  'learning-paths': {
-    name: '🎓 Learning Paths',
-    topics: Array.from({length: 100}, (_, i) => ({
-      id: `learning-paths-${i+1}`,
-      name: `Topic ${i+1}: Learning Path ${i+1}`,
-      file: `learning-paths-${i+1}.md`
-    }))
+function initializeCategories() {
+  // Build categories from topicConfig in markdown.js
+  const categories = {};
+  
+  if (typeof topicConfig !== 'undefined') {
+    for (const [categoryId, categoryData] of Object.entries(topicConfig)) {
+      categories[categoryId] = {
+        name: categoryData.emoji + ' ' + categoryData.name,
+        topics: categoryData.topics.map((topicName, index) => ({
+          id: `${categoryId}-${index + 1}`,
+          name: topicName,
+          file: `${categoryId}/${String(index + 1).padStart(3, '0')}-${topicName.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '')}.md`
+        }))
+      };
+    }
   }
-};
+  
+  return categories;
+}
+
+const categories = initializeCategories();
 
 let currentCategory = null;
 let currentTopic = null;
