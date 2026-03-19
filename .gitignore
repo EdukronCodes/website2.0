@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env
+
+# Build files
+dist/
+build/
+*.zip
+
+# Temporary files
+*.log
+.cache/
+.temp/
+
+# OS files
+Thumbs.db
+.classpath
+.project
+.settings/
+
+# Local development
+localhost.conf
+local-dev-server.js
