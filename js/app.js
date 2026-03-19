@@ -1,168 +1,160 @@
-// Navigation configuration
-const navConfig = {
-  python: {
-    title: 'Python',
-    items: [
-      { title: 'Introduction', id: 'intro' },
-      { title: 'Syntax', id: 'syntax' },
-      { title: 'Variables', id: 'variables' },
-      { title: 'Data Types', id: 'data-types' },
-      { title: 'Functions', id: 'functions' },
-      { title: 'Loops', id: 'loops' },
-      { title: 'OOP', id: 'oop' }
-    ]
-  },
-  html: {
-    title: 'HTML',
-    items: [
-      { title: 'Basics', id: 'basics' },
-      { title: 'Elements', id: 'elements' },
-      { title: 'Attributes', id: 'attributes' },
-      { title: 'Headings', id: 'headings' },
-      { title: 'Paragraphs', id: 'paragraphs' },
-      { title: 'Forms', id: 'forms' },
-      { title: 'Semantic HTML', id: 'semantic' }
-    ]
-  },
-  css: {
-    title: 'CSS',
-    items: [
-      { title: 'Introduction', id: 'intro' },
-      { title: 'Syntax', id: 'syntax' },
-      { title: 'Selectors', id: 'selectors' },
-      { title: 'Box Model', id: 'box-model' },
-      { title: 'Flexbox', id: 'flexbox' },
-      { title: 'Grid', id: 'grid' },
-      { title: 'Animations', id: 'animations' }
-    ]
-  },
-  javascript: {
-    title: 'JavaScript',
-    items: [
-      { title: 'Introduction', id: 'intro' },
-      { title: 'Syntax', id: 'syntax' },
-      { title: 'Variables', id: 'variables' },
-      { title: 'Functions', id: 'functions' },
-      { title: 'DOM', id: 'dom' },
-      { title: 'Events', id: 'events' },
-      { title: 'Promises & Async', id: 'async' }
-    ]
-  },
-  sql: {
-    title: 'SQL',
-    items: [
-      { title: 'Introduction', id: 'intro' },
-      { title: 'SELECT', id: 'select' },
-      { title: 'WHERE', id: 'where' },
-      { title: 'JOIN', id: 'join' },
-      { title: 'GROUP BY', id: 'group-by' },
-      { title: 'INSERT & UPDATE', id: 'insert-update' },
-      { title: 'Advanced', id: 'advanced' }
-    ]
-  }
-};
+// Main app.js - Enhanced version for comprehensive learning platform
 
-// Initialize navigation on page load
-document.addEventListener('DOMContentLoaded', function() {
-  initNavigation();
-  initTheme();
-  initSearch();
+// Markdown rendering setup
+marked.setOptions({
+  breaks: true,
+  gfm: true
 });
 
-// Initialize navigation system
-function initNavigation() {
-  const navItems = document.querySelectorAll('.navbar-menu li');
-  const sidebarTitle = document.querySelector('.sidebar-title');
-  const sidebarMenu = document.querySelector('.sidebar-menu');
+// Load theme preference on page load
+document.addEventListener('DOMContentLoaded', function() {
+  loadThemePreference();
+  setupMenuListeners();
+  setupSearchBox();
+  setupMobileMenu();
+});
 
-  navItems.forEach(item => {
+// Theme Management
+function loadThemePreference() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) themeToggle.textContent = '☀️';
+  }
+}
+
+function setupMenuListeners() {
+  // Top navigation menu items
+  const menuItems = document.querySelectorAll('.navbar-menu li');
+  
+  menuItems.forEach(item => {
     item.addEventListener('click', function(e) {
       e.preventDefault();
       const category = this.getAttribute('data-category');
       
-      // Remove active from all items
-      navItems.forEach(i => i.classList.remove('active'));
+      // Remove active class from all items
+      menuItems.forEach(li => li.classList.remove('active'));
+      
+      // Add active class to clicked item
       this.classList.add('active');
 
-      // Update sidebar
-      updateSidebar(category);
-
-      // Save to localStorage
-      localStorage.setItem('selectedCategory', category);
+      // Close sidebar on mobile
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar && window.innerWidth <= 768) {
+        sidebar.classList.remove('active');
+      }
     });
   });
 
-  // Load saved category or default to python
-  const savedCategory = localStorage.getItem('selectedCategory') || 'python';
-  updateSidebar(savedCategory);
-  
-  const activeNav = document.querySelector(`[data-category="${savedCategory}"]`);
-  if (activeNav) activeNav.classList.add('active');
-}
-
-// Update sidebar based on selected category
-function updateSidebar(category) {
-  const config = navConfig[category];
-  if (!config) return;
-
-  const sidebarTitle = document.querySelector('.sidebar-title');
-  const sidebarMenu = document.querySelector('.sidebar-menu');
-
-  sidebarTitle.textContent = config.title;
-  sidebarMenu.innerHTML = '';
-
-  config.items.forEach(item => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = `#${category}/${item.id}`;
-    a.textContent = item.title;
-    a.onclick = function(e) {
-      e.preventDefault();
-      loadPage(category, item.id);
-    };
-    li.appendChild(a);
-    sidebarMenu.appendChild(li);
-  });
-
-  // Close sidebar on mobile
-  const sidebar = document.querySelector('.sidebar');
-  if (window.innerWidth <= 768) {
-    sidebar.classList.add('hidden');
+  // Theme toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      this.textContent = isDark ? '☀️' : '🌙';
+    });
   }
 }
 
-// Load page content from Markdown file
-function loadPage(category, pageId) {
-  const path = `/docs/${category}/${pageId}.md`;
+function setupSearchBox() {
+  const searchInput = document.querySelector('.search-input');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    const results = document.querySelector('.search-results');
+    
+    if (!query) {
+      results.innerHTML = '';
+      return;
+    }
+
+    // Placeholder: In production, this would search actual topics
+    const mockResults = [
+      { title: 'Data Science Basics', category: 'Data Science' },
+      { title: 'Machine Learning Models', category: 'Machine Learning' },
+      { title: 'Python for AI', category: 'Programming' }
+    ];
+
+    const filtered = mockResults.filter(r => 
+      r.title.toLowerCase().includes(query) || 
+      r.category.toLowerCase().includes(query)
+    );
+
+    results.innerHTML = filtered.map(result => `
+      <a href="#" class="search-result-item">
+        <strong>${result.title}</strong><br>
+        <small>${result.category}</small>
+      </a>
+    `).join('');
+  });
+
+  // Close search when clicking outside
+  document.addEventListener('click', function(e) {
+    const searchContainer = document.querySelector('.search-container');
+    const searchToggle = document.querySelector('.search-toggle');
+    
+    if (searchContainer && !searchContainer.contains(e.target) && !searchToggle.contains(e.target)) {
+      searchContainer.classList.remove('active');
+    }
+  });
+}
+
+function setupMobileMenu() {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const searchToggle = document.querySelector('.search-toggle');
   
-  fetch(path)
+  if (menuToggle) {
+    menuToggle.addEventListener('click', function() {
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar) {
+        sidebar.classList.toggle('hidden');
+      }
+    });
+  }
+
+  if (searchToggle) {
+    searchToggle.addEventListener('click', function() {
+      const searchContainer = document.querySelector('.search-container');
+      if (searchContainer) {
+        searchContainer.classList.toggle('active');
+        const input = searchContainer.querySelector('.search-input');
+        if (input && searchContainer.classList.contains('active')) {
+          input.focus();
+        }
+      }
+    });
+  }
+}
+
+// Markdown loading and rendering
+function loadMarkdownFile(path) {
+  return fetch(path)
     .then(response => {
       if (!response.ok) {
-        throw new Error('Page not found');
+        throw new Error(`Failed to load ${path}`);
       }
       return response.text();
     })
-    .then(markdown => {
-      renderPage(markdown, category, pageId);
-      updateBreadcrumb(category, pageId);
-      updateActiveLink(pageId);
-      window.scrollTo(0, 0);
-    })
     .catch(error => {
-      document.querySelector('.content').innerHTML = `<p>Error loading page: ${error.message}</p>`;
+      console.error('Error loading markdown:', error);
+      return `# Error\n\nCould not load content from ${path}`;
     });
 }
 
-// Render Markdown to HTML
-function renderPage(markdown, category, pageId) {
-  // Parse markdown with marked (inline)
-  const html = marked(markdown);
-  
-  const contentDiv = document.querySelector('.content');
+function renderMarkdown(markdown) {
+  const contentDiv = document.getElementById('content');
+  if (!contentDiv) return;
+
+  // Parse and render markdown
+  const html = marked.parse(markdown);
   contentDiv.innerHTML = html;
 
-  // Highlight code blocks
-  document.querySelectorAll('pre code').forEach(block => {
+  // Apply syntax highlighting
+  contentDiv.querySelectorAll('pre code').forEach(block => {
     hljs.highlightElement(block);
     
     // Add copy button
@@ -175,10 +167,11 @@ function renderPage(markdown, category, pageId) {
     `;
     
     header.querySelector('.copy-button').addEventListener('click', function() {
-      const text = block.textContent;
-      navigator.clipboard.writeText(text);
-      this.textContent = 'Copied!';
-      setTimeout(() => { this.textContent = 'Copy'; }, 2000);
+      const code = block.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        this.textContent = 'Copied!';
+        setTimeout(() => this.textContent = 'Copy', 2000);
+      });
     });
     
     pre.insertBefore(header, block);
@@ -187,204 +180,107 @@ function renderPage(markdown, category, pageId) {
   // Generate table of contents
   generateTableOfContents();
 
-  // Calculate reading time
+  // Update reading time
   updateReadingTime(markdown);
-
-  // Update edit link
-  updateEditLink(category, pageId);
 }
 
-// Update breadcrumb navigation
-function updateBreadcrumb(category, pageId) {
-  const breadcrumb = document.querySelector('.breadcrumb');
-  const config = navConfig[category];
-  const item = config.items.find(i => i.id === pageId);
-  
-  breadcrumb.innerHTML = `
-    <a href="#home">Home</a>
-    <span class="breadcrumb-separator">/</span>
-    <a href="#${category}">${config.title}</a>
-    <span class="breadcrumb-separator">/</span>
-    <span>${item ? item.title : pageId}</span>
-  `;
-}
+function generateTableOfContents() {
+  const contentDiv = document.getElementById('content');
+  if (!contentDiv) return;
 
-// Update active link in sidebar
-function updateActiveLink(pageId) {
-  document.querySelectorAll('.sidebar-menu a').forEach(link => {
-    link.classList.remove('active');
-    if (link.href.includes(pageId)) {
-      link.classList.add('active');
+  const headings = contentDiv.querySelectorAll('h2, h3');
+  if (headings.length === 0) return;
+
+  // Add IDs to headings if they don't have them
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `heading-${index}`;
     }
   });
-}
-
-// Generate Table of Contents
-function generateTableOfContents() {
-  const headings = document.querySelectorAll('.content h2, .content h3');
-  
-  if (headings.length === 0) return;
 
   const toc = document.createElement('div');
   toc.className = 'toc';
-  toc.innerHTML = '<div class="toc-title">Table of Contents</div>';
-  
-  const list = document.createElement('ul');
-  list.className = 'toc-list';
+  toc.innerHTML = '<div class="toc-title">Table of Contents</div><ul class="toc-list">';
 
-  let currentH2 = null;
-  let sublist = null;
-
-  headings.forEach((heading, index) => {
-    const id = `heading-${index}`;
-    heading.id = id;
-
-    const item = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = `#${id}`;
-    link.textContent = heading.textContent;
-
-    if (heading.tagName === 'H2') {
-      item.appendChild(link);
-      list.appendChild(item);
-      currentH2 = item;
-      sublist = null;
-    } else if (heading.tagName === 'H3' && currentH2) {
-      if (!sublist) {
-        sublist = document.createElement('ul');
-        sublist.className = 'toc-list';
-        currentH2.appendChild(sublist);
-      }
-      const subitem = document.createElement('li');
-      subitem.appendChild(link);
-      sublist.appendChild(subitem);
-    }
+  headings.forEach(heading => {
+    const level = heading.tagName === 'H2' ? 0 : 1;
+    const indent = level * 20;
+    toc.innerHTML += `
+      <li style="margin-left: ${indent}px">
+        <a href="#${heading.id}">${heading.textContent}</a>
+      </li>
+    `;
   });
 
-  toc.appendChild(list);
-  
-  const content = document.querySelector('.content');
-  if (content.firstChild) {
-    content.insertBefore(toc, content.firstChild);
-  }
+  toc.innerHTML += '</ul>';
+  contentDiv.insertBefore(toc, contentDiv.firstChild);
 }
 
-// Calculate and display reading time
-function updateReadingTime(text) {
-  const wordsPerMinute = 200;
-  const wordCount = text.split(/\s+/).length;
-  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+function updateReadingTime(markdown) {
+  const readingTimeDiv = document.querySelector('.reading-time');
+  if (!readingTimeDiv) return;
 
-  const readingTimeEl = document.querySelector('.reading-time');
-  readingTimeEl.textContent = `⏱️ Reading time: ~${readingTime} minute${readingTime > 1 ? 's' : ''}`;
+  // Estimate reading time: 200 words per minute
+  const words = markdown.split(/\s+/).length;
+  const minutes = Math.ceil(words / 200);
+  readingTimeDiv.textContent = `⏱️ Reading time: ${minutes} minute${minutes > 1 ? 's' : ''}`;
 }
 
-// Update GitHub edit link
-function updateEditLink(category, pageId) {
-  const editLink = document.querySelector('.edit-link-url');
-  const githubURL = `https://github.com/EdukronCodes/website2.0/edit/main/docs/${category}/${pageId}.md`;
-  editLink.href = githubURL;
-}
+// Sidebar management
+function updateSidebarMenu(items) {
+  const sidebarMenu = document.querySelector('.sidebar-menu');
+  if (!sidebarMenu) return;
 
-// Theme toggle
-function initTheme() {
-  const themeToggle = document.querySelector('.theme-toggle');
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  sidebarMenu.innerHTML = items.map(item => `
+    <li>
+      <a href="#" class="sidebar-link" data-id="${item.id}">
+        ${item.title}
+      </a>
+    </li>
+  `).join('');
 
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.textContent = '☀️';
-  }
-
-  themeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-  });
-}
-
-// Mobile menu toggle
-function initMobileMenu() {
-  const menuToggle = document.querySelector('.menu-toggle');
-  const sidebar = document.querySelector('.sidebar');
-
-  if (menuToggle) {
-    menuToggle.addEventListener('click', function() {
-      sidebar.classList.toggle('hidden');
-    });
-  }
-}
-
-// Initialize search
-function initSearch() {
-  const searchToggle = document.querySelector('.search-toggle');
-  const searchContainer = document.querySelector('.search-container');
-  const searchInput = document.querySelector('.search-input');
-  const searchResults = document.querySelector('.search-results');
-
-  if (searchToggle) {
-    searchToggle.addEventListener('click', function() {
-      searchContainer.classList.toggle('active');
-      if (searchContainer.classList.contains('active')) {
-        searchInput.focus();
-      }
-    });
-  }
-
-  if (searchInput) {
-    searchInput.addEventListener('input', function(e) {
-      const query = e.target.value.toLowerCase();
-      
-      if (query.length < 2) {
-        searchResults.innerHTML = '';
-        return;
-      }
-
-      performSearch(query);
-    });
-  }
-}
-
-// Perform search across all pages
-function performSearch(query) {
-  const searchResults = document.querySelector('.search-results');
-  const results = [];
-
-  // Search in all categories and pages
-  for (const [category, config] of Object.entries(navConfig)) {
-    config.items.forEach(item => {
-      if (item.title.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)) {
-        results.push({
-          title: `${item.title} (${config.title})`,
-          category: category,
-          id: item.id
-        });
-      }
-    });
-  }
-
-  // Display search results
-  searchResults.innerHTML = '';
-  if (results.length === 0) {
-    searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
-    return;
-  }
-
-  results.forEach(result => {
-    const item = document.createElement('a');
-    item.className = 'search-result-item';
-    item.textContent = result.title;
-    item.onclick = function(e) {
+  // Add event listeners to sidebar items
+  sidebarMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function(e) {
       e.preventDefault();
-      loadPage(result.category, result.id);
-      document.querySelector('.search-container').classList.remove('active');
-    };
-    searchResults.appendChild(item);
+      
+      // Update active state
+      sidebarMenu.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Load content (would be implemented based on actual file structure)
+      const id = this.dataset.id;
+      console.log('Loading:', id);
+    });
   });
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  initMobileMenu();
-});
+// Breadcrumb management
+function updateBreadcrumb(items) {
+  const breadcrumb = document.querySelector('.breadcrumb');
+  if (!breadcrumb) return;
+
+  breadcrumb.innerHTML = items.map((item, index) => {
+    if (index === items.length - 1) {
+      return `<span>${item}</span>`;
+    }
+    return `<a href="#">${item}</a><span class="breadcrumb-separator"> / </span>`;
+  }).join('');
+}
+
+// Navigation functions
+function previousPage() {
+  console.log('Navigate to previous page');
+}
+
+function nextPage() {
+  console.log('Navigate to next page');
+}
+
+// Export functions for use in navigation
+window.loadMarkdownFile = loadMarkdownFile;
+window.renderMarkdown = renderMarkdown;
+window.updateSidebarMenu = updateSidebarMenu;
+window.updateBreadcrumb = updateBreadcrumb;
+window.previousPage = previousPage;
+window.nextPage = nextPage;

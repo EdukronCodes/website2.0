@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduDocs - Learn Web & Programming Languages</title>
-  <meta name="description" content="Learn HTML, CSS, JavaScript, Python, SQL and more with interactive tutorials">
+  <title>Learning Platform - Data Science, AI & MLOps</title>
+  <meta name="description" content="Comprehensive learning platform covering Data Science, AI, ML, Gen AI, Agentic AI, Programming, Big Data, Azure, DevOps & more">
   
   <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/responsive.css">
   
   <!-- Highlight.js for syntax highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -22,14 +24,21 @@
 <body>
   <!-- Top Navigation Bar -->
   <nav class="navbar">
-    <div class="navbar-brand" onclick="loadHome()">📚 EduDocs</div>
+    <div class="navbar-brand" onclick="loadHome()">📚 Learning Platform</div>
     
     <ul class="navbar-menu">
-      <li data-category="python">🐍 Python</li>
-      <li data-category="html">📄 HTML</li>
-      <li data-category="css">🎨 CSS</li>
-      <li data-category="javascript">⚡ JavaScript</li>
-      <li data-category="sql">💾 SQL</li>
+      <li data-category="data-science">📊 Data Science</li>
+      <li data-category="ai">🤖 AI</li>
+      <li data-category="ml">🧠 Machine Learning</li>
+      <li data-category="genai">✨ Gen AI</li>
+      <li data-category="agentic">🎯 Agentic AI</li>
+      <li data-category="programming">💻 Programming</li>
+      <li data-category="big-data">📈 Big Data</li>
+      <li data-category="azure-data">☁️ Azure Data</li>
+      <li data-category="azure-ai">🔧 Azure AI</li>
+      <li data-category="devops">⚙️ DevOps</li>
+      <li data-category="projects">🚀 Projects</li>
+      <li data-category="learning-paths">🎓 Learn Paths</li>
     </ul>
 
     <div class="navbar-controls">
@@ -41,7 +50,7 @@
 
   <!-- Search Container -->
   <div class="search-container">
-    <input type="text" class="search-input" placeholder="Search tutorials...">
+    <input type="text" class="search-input" placeholder="Search topics...">
     <div class="search-results"></div>
   </div>
 
@@ -49,8 +58,14 @@
   <div class="container">
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <div class="sidebar-title">Python</div>
-      <ul class="sidebar-menu"></ul>
+      <div class="sidebar-header">
+        <h2 id="category-title">Select a Category</h2>
+        <button class="sidebar-toggle">☰</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="sidebar-search" placeholder="Search topics...">
+      </div>
+      <ul class="sidebar-menu" id="sidebar-menu"></ul>
     </aside>
 
     <!-- Main Content Area -->
@@ -64,71 +79,43 @@
       <div class="reading-time"></div>
 
       <!-- Page Title -->
-      <h1 class="page-title" id="page-title">Welcome to EduDocs</h1>
+      <h1 class="page-title" id="page-title">Welcome to Learning Platform</h1>
 
       <!-- Main Content -->
       <div class="content" id="content">
-        <h2>Learn Programming & Web Development</h2>
+        <h2>Master Data Science, AI & MLOps</h2>
         
-        <p><strong>EduDocs</strong> is a comprehensive, interactive learning platform for web developers and programmers. Whether you're a beginner or looking to advance your skills, you'll find structured tutorials and examples for:</p>
+        <p><strong>Welcome!</strong> This is your comprehensive learning platform covering:</p>
 
         <ul>
-          <li><strong>🐍 Python</strong> - Get started with one of the most beginner-friendly programming languages</li>
-          <li><strong>📄 HTML</strong> - Master the building blocks of the web</li>
-          <li><strong>🎨 CSS</strong> - Create beautiful, responsive designs</li>
-          <li><strong>⚡ JavaScript</strong> - Bring interactivity to your websites</li>
-          <li><strong>💾 SQL</strong> - Work with databases efficiently</li>
+          <li><strong>📊 Data Science</strong> - Statistics, Probability, Data Cleaning, EDA, Visualization</li>
+          <li><strong>🤖 Artificial Intelligence</strong> - Search Algorithms, Knowledge Representation, Computer Vision, NLP</li>
+          <li><strong>🧠 Machine Learning</strong> - Supervised & Unsupervised Learning, Model Evaluation, Ensemble Methods</li>
+          <li><strong>✨ Generative AI</strong> - LLMs, Transformers, Prompt Engineering, RAG, Chatbots</li>
+          <li><strong>🎯 Agentic AI</strong> - AI Agents, Multi-Agent Systems, Orchestration Frameworks</li>
+          <li><strong>💻 Programming</strong> - Python, SQL, APIs, Web Scraping, Code Optimization</li>
+          <li><strong>📈 Big Data</strong> - Apache Spark, PySpark, Stream Processing, Performance Tuning</li>
+          <li><strong>☁️ Azure Data Engineering</strong> - ADF, Databricks, ADLS, Synapse Analytics</li>
+          <li><strong>🔧 Azure AI & ML</strong> - Azure ML, AutoML, Cognitive Services, MLOps</li>
+          <li><strong>⚙️ DevOps & MLOps</strong> - CI/CD, Docker, Kubernetes, Infrastructure as Code</li>
+          <li><strong>🚀 Projects & Use Cases</strong> - End-to-End Systems, Real-World Applications</li>
+          <li><strong>🎓 Learning Paths</strong> - Curated Roadmaps for Different Roles</li>
         </ul>
 
         <h2>How to Get Started</h2>
         
-        <p>Select a topic from the top navigation bar to begin learning. The left sidebar will show you all available lessons for that topic. Each lesson includes:</p>
-
-        <ul>
-          <li>Clear explanations with real-world examples</li>
-          <li>Code snippets with syntax highlighting</li>
-          <li>Copy-to-clipboard functionality for code blocks</li>
-          <li>Interactive learning paths</li>
-          <li>Quick navigation between lessons</li>
-        </ul>
+        <p>Select a category from the top navigation bar. The left sidebar will display all topics for that category. Each topic is organized in its own markdown file for easy navigation.</p>
 
         <h2>Features</h2>
 
         <ul>
           <li>📱 <strong>Mobile Responsive</strong> - Learn on any device</li>
           <li>🌓 <strong>Dark Mode</strong> - Easy on the eyes</li>
-          <li>🔍 <strong>Search</strong> - Quickly find what you need</li>
-          <li>⏱️ <strong>Reading Time</strong> - Know how long each lesson takes</li>
-          <li>📑 <strong>Table of Contents</strong> - Easy navigation within pages</li>
-          <li>💾 <strong>Copy Code</strong> - One-click code copying</li>
-          <li>💬 <strong>Community</strong> - Learn from others</li>
+          <li>🔍 <strong>Search</strong> - Find topics quickly</li>
+          <li>⏱️ <strong>Reading Time</strong> - Estimate time for each topic</li>
+          <li>💾 <strong>Copy Code</strong> - One-click code sharing</li>
+          <li>📚 <strong>1000+ Topics</strong> - Comprehensive coverage</li>
         </ul>
-
-        <h2>Learning Path</h2>
-
-        <p>We recommend starting with the fundamentals:</p>
-
-        <ol>
-          <li>Begin with <strong>HTML</strong> to understand web structure</li>
-          <li>Learn <strong>CSS</strong> for styling and layout</li>
-          <li>Master <strong>JavaScript</strong> for interactivity</li>
-          <li>Explore <strong>Python</strong> for backend development</li>
-          <li>Understand <strong>SQL</strong> for database management</li>
-        </ol>
-
-        <h2>Tips for Success</h2>
-
-        <ul>
-          <li>Practice code as you learn - don't just read</li>
-          <li>Build small projects to reinforce concepts</li>
-          <li>Review previous lessons when confused</li>
-          <li>Join the community and share your progress</li>
-          <li>Set realistic goals and track your progress</li>
-        </ul>
-
-        <h2>About This Site</h2>
-
-        <p>EduDocs is built with modern web technologies and is fully open-source. It's designed to be accessible, fast, and easy to use. All content is available as Markdown, making it easy to contribute and improve.</p>
 
         <!-- Edit GitHub Link -->
         <div class="edit-github">
@@ -146,37 +133,25 @@
 
   <!-- Scripts -->
   <script src="js/app.js"></script>
+  <script src="js/navigation.js"></script>
   <script>
     // Load home page on brand click
     function loadHome() {
       const contentDiv = document.querySelector('.content');
       contentDiv.innerHTML = `
-        <h2>Learn Programming & Web Development</h2>
-        
-        <p><strong>EduDocs</strong> is a comprehensive, interactive learning platform for web developers and programmers. Whether you're a beginner or looking to advance your skills, you'll find structured tutorials and examples for:</p>
-
-        <ul>
-          <li><strong>🐍 Python</strong> - Get started with one of the most beginner-friendly programming languages</li>
-          <li><strong>📄 HTML</strong> - Master the building blocks of the web</li>
-          <li><strong>🎨 CSS</strong> - Create beautiful, responsive designs</li>
-          <li><strong>⚡ JavaScript</strong> - Bring interactivity to your websites</li>
-          <li><strong>💾 SQL</strong> - Work with databases efficiently</li>
-        </ul>
-
-        <h2>How to Get Started</h2>
-        
-        <p>Select a topic from the top navigation bar to begin learning. The left sidebar will show you all available lessons for that topic.</p>
+        <h2>Master Data Science, AI & MLOps</h2>
+        <p>Welcome to your comprehensive learning platform. Select a category to begin your learning journey.</p>
       `;
       window.scrollTo(0, 0);
     }
 
     // Placeholder functions for navigation
     function previousPage() {
-      alert('Implement previous page navigation');
+      alert('Navigate to previous topic');
     }
 
     function nextPage() {
-      alert('Implement next page navigation');
+      alert('Navigate to next topic');
     }
   </script>
 </body>
